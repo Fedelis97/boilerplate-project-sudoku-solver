@@ -81,7 +81,13 @@ module.exports = function (app) {
   app.route("/api/issues/:project")
     .get((req, res) => {
       const project = req.params.project;
-      const projectIssues = issues[project] || [];
+      
+      // Ensure we always return an array, even if no issues exist
+      if (!issues[project]) {
+        issues[project] = [];
+      }
+      
+      const projectIssues = issues[project];
       
       // Apply filters from query parameters
       let filteredIssues = projectIssues;
